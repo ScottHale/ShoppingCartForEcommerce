@@ -4,6 +4,21 @@
         <link rel="stylesheet" type="text/css" href="cart.css">
     </head>
     <body>
-        <div id="cart-container"></div>       
+        <div>
+            <form onsubmit="return false;">
+                <label>Item Name</label>
+                <input id="name" type="text"/>
+                <label>Item Size</label>
+                <input id="size" type="text"/>
+                <label>Quantity</label>
+                <input id="quantity" type="text"/>
+                <label>Price</label>
+                <input id="price" type="text"/>
+                <input type="submit" onclick="window.addToCart();" value="Add to Cart" class="button">
+            </form>
+        </div>
+        <button onclick="window.showCart();">Show Cart</button>
+        <button onclick="window.hideCart();">Hide Cart</button>
+        <div id="cart-container"></div>
     </body>
 </html>

@@ -29,7 +29,7 @@ class Cart{
 
   updateItem = (item_key, item_qty) => {
     this.cart = this._getCart();
-    this.cart[item_key].qty = Number(this.cart[item_id].qty) + Number(item_qty);
+    this.cart[item_key].qty = Number(this.cart[item_key].qty) + Number(item_qty);
     localStorage.setItem("cart", JSON.stringify(this.cart));
   }
 
@@ -166,6 +166,10 @@ if(!window.cart){
     var item_size = form.size?form.size.value:"One Size Fits All";
     var item_cost = form.price.value.replace("$","");
     window.cart.addItem(form.name.value, item_size, form.quantity.value, item_cost);
+    let container = document.getElementById("cart-container");
+    if(container && container.style.display === "block"){
+      window.showCart();
+    }
   }
 
   window.removeFromCart = (item_id) =>{
