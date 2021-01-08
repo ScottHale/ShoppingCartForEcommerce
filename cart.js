@@ -1,26 +1,36 @@
 class Cart{
 
   constructor(){
-    this.cart = {}
+    this.cart=this._getCart();
     this.currency_format = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     this.cartTotal;
   }
 
+  _getCart = () => {
+    return this.cart = localStorage.getItem("cart")? JSON.parse(localStorage.getItem("cart")):{};
+  }
+
   removeItem = (item_key) => {
+    this.cart = this._getCart();
     delete this.cart[item_key];
+    localStorage.setItem("cart", JSON.stringify(this.cart));
   }
 
   addItem = (item_id, item_size, item_qty, item_cost) => {
+    this.cart = this._getCart();
     if(this.cart[item_id+"_"+item_size]){
       this.updateItem(item_id+"_"+item_size, item_qty);
     }
-    else{
+    else{    
       this.cart[item_id+"_"+item_size] = {id:item_id, size:item_size, qty: Number(item_qty), cost: Number(item_cost)};
+      localStorage.setItem("cart", JSON.stringify(this.cart));
     }
   }
 
   updateItem = (item_key, item_qty) => {
+    this.cart = this._getCart();
     this.cart[item_key].qty = Number(this.cart[item_id].qty) + Number(item_qty);
+    localStorage.setItem("cart", JSON.stringify(this.cart));
   }
 
   _removeChildNodes = (container) =>{
@@ -65,6 +75,7 @@ class Cart{
     container.append(header_row);
     container.append(document.createElement('hr'));
 
+    this.cart = this._getCart();
     let keys = Object.keys(this.cart);
     
     keys.map((key)=>{
@@ -125,8 +136,6 @@ class Cart{
     total_cost.innerHTML = this.currency_format.format(this.cartTotal);
     total_row.append(total_cost);
 
-
-    
     container.append(total_row);
   }
 
@@ -138,6 +147,7 @@ class Cart{
 
   getCartItemsCount = () =>{
     let item_count = 0;
+    this.cart = this._getCart();
     let keys = Object.keys(this.cart);
     keys.map((key)=>{
       item_count = item_count + Number(this.cart[key].qty);
@@ -150,13 +160,16 @@ class Cart{
 if(!window.cart){
   window.cart = new Cart();
 
-  window.addToCart = (form) => {
+  window.addToCart = () => {
+    var form = document.forms[0];
     // need to transform from form to js here
-    window.cart.addItem(item_id, item_qty, item_size, item_cost);
+    var item_size = form.size?form.size.value:"One Size Fits All";
+    var item_cost = form.price.value.replace("$","");
+    window.cart.addItem(form.name.value, item_size, form.quantity.value, item_cost);
   }
 
   window.removeFromCart = (item_id) =>{
-    window.cart.removeItem(item_id);
+    delete window.cart.removeItem(item_id);
     window.showCart();
   }
 
