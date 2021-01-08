@@ -173,7 +173,7 @@ if(!window.cart){
   }
 
   window.removeFromCart = (item_id) =>{
-    delete window.cart.removeItem(item_id);
+    window.cart.removeItem(item_id);
     window.showCart();
   }
 
